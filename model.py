@@ -10,7 +10,7 @@ class Generator(nn.Module):
             self.make_gen_blocks(input_dim, hidden_dim*4),
             self.make_gen_blocks(hidden_dim*4, hidden_dim*2, kernel_size=4, strides=1),
             self.make_gen_blocks(hidden_dim * 2, hidden_dim),
-            self.make_gen_blocks(hidden_dim, im_ch, kernel_size=4, strides=1, final_layer=True)
+            self.make_gen_blocks(hidden_dim, im_ch, kernel_size=4, final_layer=True)
         )
 
     def make_gen_blocks(self,input_channels, output_channels, kernel_size=3, strides=2, final_layer=False):
@@ -29,7 +29,7 @@ class Generator(nn.Module):
             ) 
 
     def forward(self, noise):
-        x = noise.viewn(len(noise), self.input_dim,1,1)
+        x = noise.view(len(noise), self.input_dim[0], 1, 1)
         return self.gen(x)
 
 

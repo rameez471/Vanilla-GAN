@@ -2,7 +2,7 @@ import torch
 from torch import nn
 import matplotlib.pyplot as plt
 from torchvision.utils import make_grid
-import torch.nn.Functional as F
+import torch.nn.functional as F
 
 def show_tensor_image(image_tensor, num_images=25, size=(1,28,28),nrow=5,show=True):
     image_tensor = (image_tensor + 1)/2
@@ -12,6 +12,9 @@ def show_tensor_image(image_tensor, num_images=25, size=(1,28,28),nrow=5,show=Tr
     if show:
         plt.show()
 
+def get_noise(n_samples,input_dim,device='cpu'):
+    return torch.randn(n_samples, input_dim, device=device)
+
 
 def get_one_hot_labels(labels, n_classes):
 
@@ -19,7 +22,7 @@ def get_one_hot_labels(labels, n_classes):
 
 def combine_vectors(x,y):
     
-    combined = torch.cat((x.float(),y.float()),axis=1)
+    combined = torch.cat((x.float(),y.float()),1)
     return combined
 
 def get_input_dimensions(z_dim, mnist_shape, n_classes):
@@ -27,10 +30,10 @@ def get_input_dimensions(z_dim, mnist_shape, n_classes):
     generator_input_dim = z_dim + n_classes
     discriminator_input_dim = mnist_shape[0] + n_classes
 
-    return generator_input_dim,discriminator_input_dim
+    return generator_input_dim, discriminator_input_dim
 
 
-def wieght_init(m):
+def weight_init(m):
 
     if isinstance(m,nn.Conv2d) or isinstance(m,nn.ConvTranspose2d):
         torch.nn.init.normal_(m.weight,0.0,0.2)
